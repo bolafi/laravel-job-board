@@ -7,32 +7,69 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
         // Eloquent ORM -> Get all data
         $data = Comment::all();
 
         // Pass the data to the view
-        return view('comment.index', ['comments' => $data, "pageTitle" => "Blog"]);
-
+        return view('comment.index', ['comments' => $data, "pageTitle" => "Comment Page"]);
     }
 
-    function show($id)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        // Comment::factory(10)->create();
+        return view('comment.create', ["pageTitle" => "Comment - Create New Comment"]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //@TODO  LATER
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
         $comment = Comment::findOrFail($id);
 
         return view('comment.show', ['comment' => $comment, "pageTitle" => $comment->title]);
     }
 
-    function create()
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
     {
-        // Comment::create([
-        //     'author' => 'Bibo',
-        //     'content' => 'finally good news',
-        //     'post_id' => '01973584-1476-72e8-94a6-8d9c6319795f'
-        // ]);
-        Comment::factory(2)->create();
 
-        return redirect('/comments');
+
+        return view('comment.edit', ["pageTitle" => "Comment - Edit Comment"]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //@TODO  LATER
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //@TODO  LATER
     }
 }
