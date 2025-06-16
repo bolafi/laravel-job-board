@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -12,11 +14,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        // Eloquent ORM -> Get all data
-        $data = Comment::all();
-
-        // Pass the data to the view
-        return view('comment.index', ['comments' => $data, "pageTitle" => "Comment Page"]);
+        return redirect('/blog');
     }
 
     /**
@@ -24,16 +22,24 @@ class CommentController extends Controller
      */
     public function create()
     {
-        // Comment::factory(10)->create();
-        return view('comment.create', ["pageTitle" => "Comment - Create New Comment"]);
+        return redirect('/blog');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CommentRequest $request)
     {
-        //@TODO  LATER
+        print_r($request->all());
+        $post = Post::findOrFail($request->input('post_id'));
+        print_r($post);
+        $comment = new Comment();
+        $comment->author = $request->input('author');
+        $comment->content = $request->input('content');
+        $comment->post_id = $request->input('post_id');
+        $comment->save();
+
+        return redirect("/blog/$post->id")->with('success', 'Comment Created Successfully');
     }
 
     /**
@@ -41,9 +47,7 @@ class CommentController extends Controller
      */
     public function show(string $id)
     {
-        $comment = Comment::findOrFail($id);
-
-        return view('comment.show', ['comment' => $comment, "pageTitle" => $comment->title]);
+        return redirect('/blog');
     }
 
     /**
